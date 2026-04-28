@@ -43,10 +43,27 @@ import { createSpriteAnimation } from './sprite.js';
 
 // --- ANIMAZIONE ESPLOSIONE ---
 // Scelta: 8 frame orizzontali, 176x176 px, 16 fps, solo prima riga.
-let explosionAnim;
+let explosionAnim, hitAnim, powerupAnim;
 export function setExplosionAnim(assets) {
+  // Esplosione: 8 frame orizzontali, 176x176 px, 16 fps
   explosionAnim = createSpriteAnimation({
     image: assets.explosion,
+    frameWidth: 176,
+    frameHeight: 176,
+    frameCount: 8,
+    fps: 16
+  });
+  // Hit flash: 8 frame orizzontali, 176x176 px, 16 fps
+  hitAnim = createSpriteAnimation({
+    image: assets.hitFlash,
+    frameWidth: 176,
+    frameHeight: 176,
+    frameCount: 8,
+    fps: 16
+  });
+  // Power-up collect: 8 frame orizzontali, 176x176 px, 16 fps
+  powerupAnim = createSpriteAnimation({
+    image: assets.powerupCollect,
     frameWidth: 176,
     frameHeight: 176,
     frameCount: 8,
@@ -61,15 +78,25 @@ export function setExplosionAnim(assets) {
  */
 export function drawEffects(ctx, assets, delta = 16) {
   effects.forEach(e => {
+    if (e.type === 'explosion' && explosionAnim) {
+      explosionAnim.update(delta);
+      explosionAnim.draw(ctx, e.x - 88, e.y - 88, 176, 176);
+      return;
+    }
+    if (e.type === 'hit' && hitAnim) {
+      hitAnim.update(delta);
+      hitAnim.draw(ctx, e.x - 88, e.y - 88, 176, 176);
+      return;
+    }
+    if (e.type === 'powerup' && powerupAnim) {
+      powerupAnim.update(delta);
+      powerupAnim.draw(ctx, e.x - 88, e.y - 88, 176, 176);
+      return;
+    }
+    // fallback statico
     let sprite;
-    if (e.type === 'explosion') {
-      if (explosionAnim) {
-        explosionAnim.update(delta);
-        explosionAnim.draw(ctx, e.x - 88, e.y - 88, 176, 176);
-        return;
-      }
-      sprite = assets.explosion;
-    } else if (e.type === 'hit') sprite = assets.hitFlash;
+    if (e.type === 'explosion') sprite = assets.explosion;
+    else if (e.type === 'hit') sprite = assets.hitFlash;
     else if (e.type === 'powerup') sprite = assets.powerupCollect;
     if (sprite) {
       ctx.save();
