@@ -162,7 +162,7 @@ function gameLoop() {
 	ctx.restore();
 	// ---
 	drawBullets(ctx);
-	drawEnemies(ctx);
+	drawEnemies(ctx, assets);
 	drawPowerUps(ctx);
 	drawHUD(ctx, canvasWidth);
 	bgOffset += bgSpeed;

@@ -61,14 +61,19 @@ export function updateEnemies(canvasHeight, player, loseLife) {
 }
 
 /**
- * Disegna i nemici sul canvas
+ * Disegna i nemici sul canvas usando sprite PNG
  * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ * @param {object} assets - Oggetto asset loader centralizzato
  */
-export function drawEnemies(ctx) {
+export function drawEnemies(ctx, assets) {
   ctx.save();
-  ctx.fillStyle = enemyColor;
-  enemies.forEach(e => {
-    ctx.fillRect(e.x, e.y, e.width, e.height);
+  enemies.forEach((e, i) => {
+    // Alterna sprite per varietà (esempio: enemy1, enemy2, enemy3)
+    let sprite;
+    if (i % 3 === 0) sprite = assets.enemy1;
+    else if (i % 3 === 1) sprite = assets.enemy2;
+    else sprite = assets.enemy3;
+    ctx.drawImage(sprite, e.x, e.y, e.width, e.height);
   });
   ctx.restore();
 }
