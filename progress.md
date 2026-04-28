@@ -24,8 +24,11 @@
 - Completare la documentazione tecnica e i commenti
 
 
+
 ### Ultimo avanzamento
-- Implementati e superati test automatici reali per tutti i moduli principali. Configurazione Jest ESM automatica completata.
+- Integrato asset grafico PNG per il player tramite asset loader centralizzato (`assets.js`).
+- Il rendering del player ora utilizza lo sprite PNG, non più un rettangolo placeholder.
+- Commit e push eseguiti su develop.
 
 ---
 
