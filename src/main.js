@@ -14,6 +14,7 @@ import { createSpriteAnimation } from './sprite.js';
 let assetsReady = false;
 let playerAnim;
 let enemyAnims = [];
+let bossAnim;
 loadAssets(() => {
 	// --- ANIMAZIONE PLAYER ---
 	// Scelta: 8 frame orizzontali, 40x40 px, 8 fps. Idle/movimento, nessuna animazione verticale.
@@ -31,6 +32,15 @@ loadAssets(() => {
 		createSpriteAnimation({ image: assets.enemy2, frameWidth: 36, frameHeight: 36, frameCount: 8, fps: 8 }),
 		createSpriteAnimation({ image: assets.enemy3, frameWidth: 36, frameHeight: 36, frameCount: 8, fps: 8 })
 	];
+	// --- ANIMAZIONE BOSS ---
+	// Scelta: 8 frame orizzontali, 120x215 px, 8 fps, solo prima riga.
+	bossAnim = createSpriteAnimation({
+		image: assets.boss,
+		frameWidth: 120,
+		frameHeight: Math.round(120 * 2752 / 1536),
+		frameCount: 8,
+		fps: 8
+	});
 	assetsReady = true;
 });
 setupPlayerControls();
@@ -119,8 +129,9 @@ function gameLoop() {
 	updatePlayer(canvasWidth, canvasHeight);
 	if (playerAnim) playerAnim.update(delta);
 	updateBullets();
-	// Aggiorna animazioni nemici
+	// Aggiorna animazioni nemici e boss
 	enemyAnims.forEach(anim => anim.update(delta));
+	if (bossAnim) bossAnim.update(delta);
 	updateEnemies(canvasHeight, player, () => {
 		addEffect('explosion', player.x + player.width/2, player.y + player.height/2);
 		loseLife();
@@ -148,7 +159,12 @@ function gameLoop() {
 	}
 	if (bossActive) {
 		updateBosses(canvasWidth, canvasHeight);
-		drawBosses(ctx, assets);
+		// --- ANIMAZIONE SPRITE BOSS ---
+		ctx.save();
+		bosses.forEach(boss => {
+			if (bossAnim) bossAnim.draw(ctx, boss.x, boss.y, boss.width, boss.height);
+		});
+		ctx.restore();
 		// Collisioni boss-proiettili
 		for (let i = bosses.length - 1; i >= 0; i--) {
 			const boss = bosses[i];
