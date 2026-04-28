@@ -1,12 +1,29 @@
-// Gestione proiettili del giocatore
+/**
+ * Gestione proiettili del giocatore
+ * @module bullets
+ */
+
+/**
+ * Array dei proiettili attivi
+ * @type {Array<{x: number, y: number, width: number, height: number}>}
+ */
 export const bullets = [];
+/** Velocità dei proiettili */
 export const bulletSpeed = 8;
+/** Larghezza di un proiettile */
 const bulletWidth = 6;
+/** Altezza di un proiettile */
 const bulletHeight = 16;
+/** Colore dei proiettili */
 const bulletColor = '#fff';
 let canShoot = true;
+/** Ritardo tra uno sparo e l'altro (ms) */
 const shootDelay = 180; // ms
 
+/**
+ * Spara un proiettile dal giocatore
+ * @param {{x: number, y: number, width: number, height: number}} player - Il giocatore
+ */
 export function shoot(player) {
   if (!canShoot) return;
   bullets.push({
@@ -19,6 +36,9 @@ export function shoot(player) {
   setTimeout(() => { canShoot = true; }, shootDelay);
 }
 
+/**
+ * Aggiorna la posizione dei proiettili e rimuove quelli fuori dal canvas
+ */
 export function updateBullets() {
   for (let i = bullets.length - 1; i >= 0; i--) {
     bullets[i].y -= bulletSpeed;
@@ -28,6 +48,10 @@ export function updateBullets() {
   }
 }
 
+/**
+ * Disegna i proiettili sul canvas
+ * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ */
 export function drawBullets(ctx) {
   ctx.save();
   ctx.fillStyle = bulletColor;
@@ -37,6 +61,10 @@ export function drawBullets(ctx) {
   ctx.restore();
 }
 
+/**
+ * Imposta il controllo per sparare tramite la barra spaziatrice
+ * @param {{x: number, y: number, width: number, height: number}} player - Il giocatore
+ */
 export function setupBulletControls(player) {
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space') shoot(player);

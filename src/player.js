@@ -1,4 +1,12 @@
-// Parametri e funzioni per il giocatore
+/**
+ * Parametri e funzioni per il giocatore
+ * @module player
+ */
+
+/**
+ * Oggetto che rappresenta il giocatore
+ * @type {{x: number, y: number, width: number, height: number, speed: number, color: string, moving: {left: boolean, right: boolean, up: boolean, down: boolean}}}
+ */
 export const player = {
   x: 220,
   y: 560,
@@ -9,6 +17,10 @@ export const player = {
   moving: { left: false, right: false, up: false, down: false }
 };
 
+/**
+ * Disegna il giocatore sul canvas
+ * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ */
 export function drawPlayer(ctx) {
   ctx.save();
   ctx.fillStyle = player.color;
@@ -16,6 +28,11 @@ export function drawPlayer(ctx) {
   ctx.restore();
 }
 
+/**
+ * Aggiorna la posizione del giocatore in base all'input e ai limiti del canvas
+ * @param {number} canvasWidth - Larghezza del canvas
+ * @param {number} canvasHeight - Altezza del canvas
+ */
 export function updatePlayer(canvasWidth, canvasHeight) {
   if (player.moving.left) player.x -= player.speed;
   if (player.moving.right) player.x += player.speed;
@@ -26,6 +43,9 @@ export function updatePlayer(canvasWidth, canvasHeight) {
   player.y = Math.max(0, Math.min(canvasHeight - player.height, player.y));
 }
 
+/**
+ * Imposta i listener per il controllo del giocatore tramite tastiera
+ */
 export function setupPlayerControls() {
   window.addEventListener('keydown', (e) => {
     switch (e.key) {
