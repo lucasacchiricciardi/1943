@@ -117,7 +117,7 @@ function gameLoop() {
 	}
 	if (bossActive) {
 		updateBosses(canvasWidth, canvasHeight);
-		drawBosses(ctx);
+		drawBosses(ctx, assets);
 		// Collisioni boss-proiettili
 		for (let i = bosses.length - 1; i >= 0; i--) {
 			const boss = bosses[i];

@@ -43,14 +43,14 @@ export function updateBosses(canvasWidth, canvasHeight) {
 }
 
 /**
- * Disegna i boss sul canvas
+ * Disegna i boss sul canvas usando sprite PNG
  * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ * @param {object} assets - Oggetto asset loader centralizzato
  */
-export function drawBosses(ctx) {
+export function drawBosses(ctx, assets) {
   ctx.save();
-  ctx.fillStyle = bossColor;
   bosses.forEach(boss => {
-    ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
+    ctx.drawImage(assets.boss, boss.x, boss.y, boss.width, boss.height);
   });
   ctx.restore();
 }
