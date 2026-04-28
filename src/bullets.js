@@ -49,14 +49,16 @@ export function updateBullets() {
 }
 
 /**
- * Disegna i proiettili sul canvas
+ * Disegna i proiettili sul canvas usando sprite PNG
  * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ * @param {object} assets - Oggetto asset loader centralizzato
+ * @param {boolean} isEnemy - Se true, usa sprite proiettile nemico
  */
-export function drawBullets(ctx) {
+export function drawBullets(ctx, assets, isEnemy = false) {
   ctx.save();
-  ctx.fillStyle = bulletColor;
   bullets.forEach(b => {
-    ctx.fillRect(b.x, b.y, b.width, b.height);
+    const sprite = isEnemy ? assets.bulletEnemy : assets.bulletPlayer;
+    ctx.drawImage(sprite, b.x, b.y, b.width, b.height);
   });
   ctx.restore();
 }

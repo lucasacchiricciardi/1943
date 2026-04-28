@@ -161,7 +161,7 @@ function gameLoop() {
 	);
 	ctx.restore();
 	// ---
-	drawBullets(ctx);
+	drawBullets(ctx, assets);
 	drawEnemies(ctx, assets);
 	drawPowerUps(ctx);
 	drawHUD(ctx, canvasWidth);
