@@ -9,8 +9,9 @@
  */
 export const bosses = [];
 const bossColor = '#8e44ad';
-const bossWidth = 80;
-const bossHeight = 80;
+// Dimensioni reali asset: 1536x2752. Ridimensionamento proporzionale per il canvas.
+const bossWidth = 120;
+const bossHeight = Math.round(120 * 2752 / 1536); // ≈ 215
 const bossSpeed = 1.2;
 
 /**
