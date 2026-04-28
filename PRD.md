@@ -3,7 +3,9 @@ Ecco una bozza iniziale di un documento PRD (Product Requirements Document) per 
 ---
 
 
+---
 # Product Requirements Document (PRD)
+> **Nota:** Questo documento è stato spostato in `docs/PRD.md` secondo la nuova struttura delle cartelle. Utilizzare la versione aggiornata in `docs/` per ogni modifica futura.
 ## Titolo: Clone di 1943 – Arcade Shooter
 
 ### 1. Obiettivo del Prodotto

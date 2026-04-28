@@ -1,0 +1,28 @@
+{
+  "name": "1943",
+  "version": "1.0.0",
+  "description": "1. Definire le specifiche dettagliate per il MVP (giocabilità base, nemici, power-up, boss, punteggio, vite)\r 2. Preparare le user stories e suddividerle in task per lo sviluppo\r 3. Impostare l’ambiente di sviluppo (configurazione base, struttura repo, strumenti TDD)\r 4. Sviluppare la schermata iniziale e la struttura HTML/CSS di base\r 5. Implementare il canvas di gioco e il rendering dello sfondo con scorrimento verticale\r 6. Sviluppare il controllo dell’aereo giocatore e la gestione input da tastiera\r 7. Implementare la logica di sparo e collisione proiettili-nemici\r 8. Creare i primi nemici con pattern semplici\r 9. Integrare il sistema di punteggio e vite\r 10. Scrivere i primi test automatici (TDD) per le funzionalità base\r 11. Documentare ogni funzionalità implementata in modo sintetico in docs/",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucasacchiricciardi/1943.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/lucasacchiricciardi/1943/issues"
+  },
+  "homepage": "https://github.com/lucasacchiricciardi/1943#readme",
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}

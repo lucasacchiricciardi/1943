@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1943 Arcade Clone</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="start-screen" class="screen">
+		<h1>1943: Arcade Clone</h1>
+		<button id="start-btn">Start</button>
+	</div>
+	<div id="game-container" class="hidden">
+		<canvas id="game-canvas" width="480" height="640"></canvas>
+	</div>
+	<div id="game-over" class="screen hidden">
+		<h2>Game Over</h2>
+		<p id="final-score"></p>
+		<button id="restart-btn">Rigioca</button>
+	</div>
+	<script src="main.js"></script>
+</body>
+</html>

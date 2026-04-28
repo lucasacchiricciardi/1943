@@ -1,0 +1,31 @@
+# Node.js
+node_modules/
+
+# Output di test e log
+coverage/
+*.log
+
+# File temporanei di sistema
+.DS_Store
+Thumbs.db
+
+# Output editor
+.vscode/
+
+# Output di build (se usato)
+dist/
+build/
+
+# File di ambiente
+.env
+
+# Output di Live Server
+.liveserver.json
+
+# Output di Jest
+jest-cache/
+jest-config/
+jest-html-reporters-*
+
+# Altro
+*.tmp
