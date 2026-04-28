@@ -1,18 +1,20 @@
-# To-Do List Progetto "Clone 1943"
+# Roadmap Miglioramento Gameplay – Clone 1943
 
-## Attività Prioritarie
+## Fase 1 – Arricchimento Dinamiche
+- [ ] Aggiungere pattern di movimento avanzati ai nemici (zig-zag, onde, gruppi)
+- [ ] Introdurre nuovi tipi di nemici con comportamenti diversi
+- [ ] Potenziare i boss: attacchi speciali, fasi multiple, punti deboli
+- [ ] Rendere i power-up più strategici (es. sparo doppio, velocità di fuoco, scudo)
 
-1. Definire le specifiche dettagliate per il MVP (giocabilità base, nemici, power-up, boss, punteggio, vite)
-2. Preparare le user stories e suddividerle in task per lo sviluppo
-3. Impostare l’ambiente di sviluppo (configurazione base, struttura repo, strumenti TDD)
-4. Sviluppare la schermata iniziale e la struttura HTML/CSS di base
-5. Implementare il canvas di gioco e il rendering dello sfondo con scorrimento verticale
-6. Sviluppare il controllo dell’aereo giocatore e la gestione input da tastiera
-7. Implementare la logica di sparo e collisione proiettili-nemici
-8. Creare i primi nemici con pattern semplici
-9. Integrare il sistema di punteggio e vite
-10. Scrivere i primi test automatici (TDD) per le funzionalità base
-11. Documentare ogni funzionalità implementata in modo sintetico in docs/
+## Fase 2 – Coinvolgimento e Feedback
+- [ ] Aggiungere effetti visivi per colpi, esplosioni, raccolta power-up, sconfitta boss
+- [ ] Integrare effetti sonori e musica di sottofondo
+- [ ] Migliorare la gestione delle collisioni (bounding box più precisi)
+
+## Fase 3 – Progressione e Longevità
+- [ ] Introdurre ostacoli dinamici e nuovi eventi nei livelli avanzati
+- [ ] Implementare una difficoltà crescente e parametri dinamici
+- [ ] Aggiungere una classifica locale e possibilità di inserire il nome per il punteggio
 
 ---
 
