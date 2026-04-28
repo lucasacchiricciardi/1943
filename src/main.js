@@ -164,7 +164,7 @@ function gameLoop() {
 	drawBullets(ctx, assets);
 	drawEnemies(ctx, assets);
 	drawPowerUps(ctx, assets);
-	drawHUD(ctx, canvasWidth);
+	drawHUD(ctx, canvasWidth, assets);
 	bgOffset += bgSpeed;
 	if (gameState.lives > 0 && (bossActive || levelInProgress)) requestAnimationFrame(gameLoop);
 }

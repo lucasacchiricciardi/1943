@@ -18,12 +18,22 @@ export const gameState = {
  * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
  * @param {number} canvasWidth - Larghezza del canvas
  */
-export function drawHUD(ctx, canvasWidth) {
+/**
+ * Disegna l'HUD (punteggio e vite) sul canvas usando sprite PNG
+ * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ * @param {number} canvasWidth - Larghezza del canvas
+ * @param {object} assets - Oggetto asset loader centralizzato
+ */
+export function drawHUD(ctx, canvasWidth, assets) {
   ctx.save();
   ctx.font = '20px Segoe UI, Arial, sans-serif';
   ctx.fillStyle = '#fff';
   ctx.fillText(`Punteggio: ${gameState.score}`, 16, 32);
-  ctx.fillText(`Vite: ${gameState.lives}`, canvasWidth - 110, 32);
+  // Icona vite (usa HUD set, posizione fissa, dimensione 28x28)
+  const iconSize = 28;
+  for (let i = 0; i < gameState.lives; i++) {
+    ctx.drawImage(assets.hudSet, canvasWidth - 110 + i * (iconSize + 4), 8, iconSize, iconSize);
+  }
   ctx.restore();
 }
 
