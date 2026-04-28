@@ -2,11 +2,15 @@ Ecco una bozza iniziale di un documento PRD (Product Requirements Document) per 
 
 ---
 
-# Product Requirements Document (PRD)  
+
+# Product Requirements Document (PRD)
 ## Titolo: Clone di 1943 – Arcade Shooter
 
 ### 1. Obiettivo del Prodotto
 Realizzare un clone fedele del classico videogioco arcade "1943: The Battle of Midway", giocabile su browser web tramite tecnologie HTML5, CSS e JavaScript, con grafica e gameplay ispirati all’originale.
+
+### 1.1 Metodologia di Sviluppo
+Lo sviluppo seguirà un approccio **spec-driven**: ogni funzionalità sarà implementata a partire da specifiche dettagliate, che guideranno la progettazione e la realizzazione del codice. Verrà inoltre adottata la metodologia **Test-Driven Development (TDD)**: per ogni funzionalità saranno scritti prima i test automatici, che dovranno essere superati dal codice implementato.
 
 ### 2. Funzionalità Principali
 
