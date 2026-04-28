@@ -25,10 +25,11 @@
 
 
 
+
 ### Ultimo avanzamento
-- Integrato asset grafico PNG per il player tramite asset loader centralizzato (`assets.js`).
-- Il rendering del player ora utilizza lo sprite PNG, non più un rettangolo placeholder.
-- Commit e push eseguiti su develop.
+- Integrati tutti gli asset grafici PNG (player, nemici, boss, proiettili, power-up, HUD, sfondo) tramite asset loader centralizzato (`assets.js`).
+- Tutti i principali elementi di gioco ora usano sprite PNG, con rendering e scorrimento ottimizzati.
+- Modifiche committate e pushate su develop.
 
 ---
 

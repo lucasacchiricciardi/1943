@@ -1,9 +1,11 @@
 # Clone 1943 – Documentazione e Roadmap
 
+
 ## Stato attuale (28/04/2026)
 
-- Integrazione asset grafici PNG tramite asset loader centralizzato (`src/assets.js`).
-- Il player viene ora renderizzato tramite sprite PNG, non più con un rettangolo placeholder.
+- Integrazione completa di tutti gli asset grafici PNG tramite asset loader centralizzato (`src/assets.js`).
+- Player, nemici, boss, proiettili, power-up, HUD e sfondo ora usano sprite PNG.
+- Rendering ottimizzato e scorrimento verticale dello sfondo.
 - Tutte le modifiche sono committate e pushate su develop.
 
 ## Roadmap Miglioramento Gameplay
