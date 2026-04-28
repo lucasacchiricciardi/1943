@@ -1,11 +1,18 @@
+import { bosses, spawnBoss, updateBosses, drawBosses, resetBosses } from './boss.js';
+import { levels, currentLevel, nextLevel, resetLevels, getLevelConfig } from './levels.js';
 import { powerUps, spawnPowerUp, updatePowerUps, drawPowerUps, resetPowerUps } from './powerups.js';
-import { player, drawPlayer, updatePlayer, setupPlayerControls } from './player.js';
+import { player, updatePlayer, setupPlayerControls } from './player.js';
 import { bullets, drawBullets, updateBullets, setupBulletControls } from './bullets.js';
 import { enemies, drawEnemies, updateEnemies, startEnemySpawning, stopEnemySpawning, resetEnemies } from './enemies.js';
 import { checkBulletEnemyCollisions } from './collision.js';
 import { gameState, drawHUD, resetGameStats, loseLife } from './hud.js';
+import { assets, loadAssets } from './assets.js';
 
-// Setup controlli
+// Setup controlli e caricamento asset
+let assetsReady = false;
+loadAssets(() => {
+	assetsReady = true;
+});
 setupPlayerControls();
 setupBulletControls(player);
 // Entry point del gioco
@@ -32,6 +39,9 @@ const canvasHeight = gameCanvas.height;
 
 let bgOffset = 0;
 const bgSpeed = 2; // pixel per frame
+
+let bossActive = false;
+let levelInProgress = true;
 
 function drawBackground() {
 	// Sfondo semplice: due rettangoli sfumati che si alternano
@@ -73,7 +83,12 @@ function applyPowerUp(type) {
 	}
 }
 
+
 function gameLoop() {
+	if (!assetsReady) {
+		requestAnimationFrame(gameLoop);
+		return;
+	}
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 	drawBackground();
 	updatePlayer(canvasWidth, canvasHeight);
@@ -95,13 +110,71 @@ function gameLoop() {
 		}
 	});
 	checkPowerUpCollision();
-	drawPlayer(ctx);
+	// Boss logic
+	if (!bossActive && getLevelConfig().boss && enemies.length === 0 && levelInProgress) {
+		spawnBoss(canvasWidth);
+		bossActive = true;
+	}
+	if (bossActive) {
+		updateBosses(canvasWidth, canvasHeight);
+		drawBosses(ctx);
+		// Collisioni boss-proiettili
+		for (let i = bosses.length - 1; i >= 0; i--) {
+			const boss = bosses[i];
+			for (let j = bullets.length - 1; j >= 0; j--) {
+				const b = bullets[j];
+				if (
+					b.x < boss.x + boss.width &&
+					b.x + 6 > boss.x &&
+					b.y < boss.y + boss.height &&
+					b.y + 16 > boss.y
+				) {
+					boss.hp--;
+					bullets.splice(j, 1);
+					if (boss.hp <= 0) {
+						bosses.splice(i, 1);
+						bossActive = false;
+						levelInProgress = false;
+						setTimeout(() => {
+							if (nextLevel()) {
+								startLevel();
+							} else {
+								endGame();
+							}
+						}, 1200);
+					}
+					break;
+				}
+			}
+		}
+	}
+	// --- INTEGRAZIONE SPRITE PLAYER ---
+	// Sostituisce drawPlayer(ctx) con rendering sprite PNG
+	ctx.save();
+	const img = assets.playerBlue;
+	ctx.drawImage(
+		img,
+		player.x,
+		player.y,
+		player.width,
+		player.height
+	);
+	ctx.restore();
+	// ---
 	drawBullets(ctx);
 	drawEnemies(ctx);
 	drawPowerUps(ctx);
 	drawHUD(ctx, canvasWidth);
 	bgOffset += bgSpeed;
-	if (gameState.lives > 0) requestAnimationFrame(gameLoop);
+	if (gameState.lives > 0 && (bossActive || levelInProgress)) requestAnimationFrame(gameLoop);
+}
+
+function startLevel() {
+	resetEnemies();
+	resetPowerUps();
+	bossActive = false;
+	levelInProgress = true;
+	startEnemySpawning(canvasWidth);
 }
 
 function startGame() {
@@ -111,9 +184,11 @@ function startGame() {
 	bullets.length = 0;
 	resetEnemies();
 	resetPowerUps();
+	resetBosses();
+	resetLevels();
 	resetGameStats();
 	showScreen(gameContainer);
-	startEnemySpawning(canvasWidth);
+	startLevel();
 	requestAnimationFrame(gameLoop);
 }
 function endGame() {

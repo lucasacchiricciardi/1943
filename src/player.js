@@ -17,16 +17,7 @@ export const player = {
   moving: { left: false, right: false, up: false, down: false }
 };
 
-/**
- * Disegna il giocatore sul canvas
- * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
- */
-export function drawPlayer(ctx) {
-  ctx.save();
-  ctx.fillStyle = player.color;
-  ctx.fillRect(player.x, player.y, player.width, player.height);
-  ctx.restore();
-}
+// Il rendering del giocatore è ora gestito in main.js tramite sprite PNG
 
 /**
  * Aggiorna la posizione del giocatore in base all'input e ai limiti del canvas
