@@ -20,13 +20,20 @@ export function updatePowerUps(canvasHeight) {
   }
 }
 
-export function drawPowerUps(ctx) {
+/**
+ * Disegna i power-up sul canvas usando sprite PNG
+ * @param {CanvasRenderingContext2D} ctx - Il contesto canvas su cui disegnare
+ * @param {object} assets - Oggetto asset loader centralizzato
+ */
+export function drawPowerUps(ctx, assets) {
   ctx.save();
   powerUps.forEach(p => {
-    ctx.fillStyle = powerUpColors[p.type];
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, powerUpSize / 2, 0, 2 * Math.PI);
-    ctx.fill();
+    let sprite;
+    if (p.type === 'fire') sprite = assets.powerupSet;
+    else if (p.type === 'heal') sprite = assets.powerupShield;
+    else if (p.type === 'bomb') sprite = assets.powerupCollect;
+    else sprite = assets.powerupSet;
+    ctx.drawImage(sprite, p.x - powerUpSize/2, p.y - powerUpSize/2, powerUpSize, powerUpSize);
   });
   ctx.restore();
 }
