@@ -1,0 +1,9 @@
+{
+  "testEnvironment": "node",
+  "transform": {},
+  "moduleFileExtensions": ["js", "json", "node"],
+  "extensionsToTreatAsEsm": [".test.js"],
+  "preset": null,
+  "globals": {},
+  "verbose": true
+}

@@ -2,6 +2,7 @@
 
 ## Stato al 28/04/2026
 
+
 ### Completato
 - Struttura cartelle e repository organizzata secondo best practice
 - Ambiente di sviluppo configurato (Node.js, Jest, estensioni VS Code, .gitignore)
@@ -14,16 +15,17 @@
 - Nemici base generati e gestiti, collisioni funzionanti
 - Repository pulito: node_modules rimosso e ignorato
 - Tutte le modifiche committate e pushate su develop
+- Test automatici reali implementati e superati per tutti i moduli principali (player, bullets, enemies, collision, boss, levels, hud)
+
 
 
 ### In corso / Da svolgere
-- Continuare la modularizzazione (es. boss, livelli)
-- Scrivere i primi test automatici (TDD)
 - Ottimizzare performance e accessibilità
 - Completare la documentazione tecnica e i commenti
 
+
 ### Ultimo avanzamento
-- Integrazione completata: i power-up sono ora gestiti in modo modulare (spawn, raccolta, effetti, rendering, reset) tramite powerups.js e main.js.
+- Implementati e superati test automatici reali per tutti i moduli principali. Configurazione Jest ESM automatica completata.
 
 ---
 
