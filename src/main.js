@@ -8,10 +8,29 @@ import { checkBulletEnemyCollisions } from './collision.js';
 import { gameState, drawHUD, resetGameStats, loseLife } from './hud.js';
 import { assets, loadAssets } from './assets.js';
 import { effects, addEffect, updateEffects, drawEffects } from './effects.js';
+import { createSpriteAnimation } from './sprite.js';
 
 // Setup controlli e caricamento asset
 let assetsReady = false;
+let playerAnim;
+let enemyAnims = [];
 loadAssets(() => {
+	// --- ANIMAZIONE PLAYER ---
+	// Scelta: 8 frame orizzontali, 40x40 px, 8 fps. Idle/movimento, nessuna animazione verticale.
+	playerAnim = createSpriteAnimation({
+		image: assets.playerBlue,
+		frameWidth: 40,
+		frameHeight: 40,
+		frameCount: 8,
+		fps: 8
+	});
+	// --- ANIMAZIONE NEMICI ---
+	// Scelta: 8 frame orizzontali, 36x36 px, 8 fps, solo prima riga. Un'animazione per ogni tipo di nemico.
+	enemyAnims = [
+		createSpriteAnimation({ image: assets.enemy1, frameWidth: 36, frameHeight: 36, frameCount: 8, fps: 8 }),
+		createSpriteAnimation({ image: assets.enemy2, frameWidth: 36, frameHeight: 36, frameCount: 8, fps: 8 }),
+		createSpriteAnimation({ image: assets.enemy3, frameWidth: 36, frameHeight: 36, frameCount: 8, fps: 8 })
+	];
 	assetsReady = true;
 });
 setupPlayerControls();
@@ -98,7 +117,10 @@ function gameLoop() {
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 	drawBackground();
 	updatePlayer(canvasWidth, canvasHeight);
+	if (playerAnim) playerAnim.update(delta);
 	updateBullets();
+	// Aggiorna animazioni nemici
+	enemyAnims.forEach(anim => anim.update(delta));
 	updateEnemies(canvasHeight, player, () => {
 		addEffect('explosion', player.x + player.width/2, player.y + player.height/2);
 		loseLife();
@@ -159,19 +181,16 @@ function gameLoop() {
 			}
 		}
 	}
-	// --- INTEGRAZIONE SPRITE PLAYER ---
-	ctx.save();
-	const img = assets.playerBlue;
-	ctx.drawImage(
-		img,
-		player.x,
-		player.y,
-		player.width,
-		player.height
-	);
-	ctx.restore();
+	// --- ANIMAZIONE SPRITE PLAYER ---
+	if (playerAnim) playerAnim.draw(ctx, player.x, player.y, player.width, player.height);
 	drawBullets(ctx, assets);
-	drawEnemies(ctx, assets);
+	// --- ANIMAZIONE SPRITE NEMICI ---
+	ctx.save();
+	enemies.forEach((e, i) => {
+		const anim = enemyAnims[i % 3];
+		anim.draw(ctx, e.x, e.y, e.width, e.height);
+	});
+	ctx.restore();
 	drawPowerUps(ctx, assets);
 	drawEffects(ctx, assets);
 	drawHUD(ctx, canvasWidth, assets);
