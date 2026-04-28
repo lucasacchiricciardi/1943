@@ -7,6 +7,7 @@ import { enemies, drawEnemies, updateEnemies, startEnemySpawning, stopEnemySpawn
 import { checkBulletEnemyCollisions } from './collision.js';
 import { gameState, drawHUD, resetGameStats, loseLife } from './hud.js';
 import { assets, loadAssets } from './assets.js';
+import { effects, addEffect, updateEffects, drawEffects } from './effects.js';
 
 // Setup controlli e caricamento asset
 let assetsReady = false;
@@ -62,6 +63,7 @@ function checkPowerUpCollision() {
 			p.y + 12 > player.y &&
 			p.y - 12 < player.y + player.height
 		) {
+			addEffect('powerup', p.x, p.y);
 			applyPowerUp(p.type);
 			powerUps.splice(i, 1);
 		}
@@ -84,22 +86,29 @@ function applyPowerUp(type) {
 }
 
 
+let lastFrameTime = performance.now();
 function gameLoop() {
 	if (!assetsReady) {
 		requestAnimationFrame(gameLoop);
 		return;
 	}
+	const now = performance.now();
+	const delta = now - lastFrameTime;
+	lastFrameTime = now;
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 	drawBackground();
 	updatePlayer(canvasWidth, canvasHeight);
 	updateBullets();
 	updateEnemies(canvasHeight, player, () => {
+		addEffect('explosion', player.x + player.width/2, player.y + player.height/2);
 		loseLife();
 		if (gameState.lives <= 0) endGame();
 	});
 	updatePowerUps(canvasHeight);
-	checkBulletEnemyCollisions(bullets, enemies, (points) => {
+	updateEffects(delta);
+	checkBulletEnemyCollisions(bullets, enemies, (points, bx, by) => {
 		gameState.score += points;
+		addEffect('explosion', bx, by);
 		// 30% di probabilità di rilascio power-up
 		if (Math.random() < 0.3) {
 			const lastEnemy = enemies.length ? enemies[enemies.length-1] : null;
@@ -130,8 +139,10 @@ function gameLoop() {
 					b.y + 16 > boss.y
 				) {
 					boss.hp--;
+					addEffect('hit', b.x + b.width/2, b.y);
 					bullets.splice(j, 1);
 					if (boss.hp <= 0) {
+						addEffect('explosion', boss.x + boss.width/2, boss.y + boss.height/2);
 						bosses.splice(i, 1);
 						bossActive = false;
 						levelInProgress = false;
@@ -149,7 +160,6 @@ function gameLoop() {
 		}
 	}
 	// --- INTEGRAZIONE SPRITE PLAYER ---
-	// Sostituisce drawPlayer(ctx) con rendering sprite PNG
 	ctx.save();
 	const img = assets.playerBlue;
 	ctx.drawImage(
@@ -160,10 +170,10 @@ function gameLoop() {
 		player.height
 	);
 	ctx.restore();
-	// ---
 	drawBullets(ctx, assets);
 	drawEnemies(ctx, assets);
 	drawPowerUps(ctx, assets);
+	drawEffects(ctx, assets);
 	drawHUD(ctx, canvasWidth, assets);
 	bgOffset += bgSpeed;
 	if (gameState.lives > 0 && (bossActive || levelInProgress)) requestAnimationFrame(gameLoop);
