@@ -44,13 +44,13 @@ let bossActive = false;
 let levelInProgress = true;
 
 function drawBackground() {
-	// Sfondo semplice: due rettangoli sfumati che si alternano
-	const grad = ctx.createLinearGradient(0, 0, 0, canvasHeight);
-	grad.addColorStop(0, '#3a6ea5');
-	grad.addColorStop(1, '#b3e0ff');
-	ctx.fillStyle = grad;
-	ctx.fillRect(0, (bgOffset % canvasHeight) - canvasHeight, canvasWidth, canvasHeight);
-	ctx.fillRect(0, (bgOffset % canvasHeight), canvasWidth, canvasHeight);
+	// Usa PNG di sfondo tramite asset loader centralizzato
+	const bgImg = assets.bg1; // Puoi alternare bg1/bg2 per livelli diversi
+	const imgHeight = bgImg.height * (canvasWidth / bgImg.width);
+	const y1 = (bgOffset % imgHeight) - imgHeight;
+	const y2 = (bgOffset % imgHeight);
+	ctx.drawImage(bgImg, 0, y1, canvasWidth, imgHeight);
+	ctx.drawImage(bgImg, 0, y2, canvasWidth, imgHeight);
 }
 
 function checkPowerUpCollision() {
