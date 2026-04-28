@@ -39,16 +39,37 @@ export function updateEffects(delta) {
   }
 }
 
+import { createSpriteAnimation } from './sprite.js';
+
+// --- ANIMAZIONE ESPLOSIONE ---
+// Scelta: 8 frame orizzontali, 176x176 px, 16 fps, solo prima riga.
+let explosionAnim;
+export function setExplosionAnim(assets) {
+  explosionAnim = createSpriteAnimation({
+    image: assets.explosion,
+    frameWidth: 176,
+    frameHeight: 176,
+    frameCount: 8,
+    fps: 16
+  });
+}
+
 /**
  * Disegna tutti gli effetti attivi
  * @param {CanvasRenderingContext2D} ctx
  * @param {object} assets
  */
-export function drawEffects(ctx, assets) {
+export function drawEffects(ctx, assets, delta = 16) {
   effects.forEach(e => {
     let sprite;
-    if (e.type === 'explosion') sprite = assets.explosion;
-    else if (e.type === 'hit') sprite = assets.hitFlash;
+    if (e.type === 'explosion') {
+      if (explosionAnim) {
+        explosionAnim.update(delta);
+        explosionAnim.draw(ctx, e.x - 88, e.y - 88, 176, 176);
+        return;
+      }
+      sprite = assets.explosion;
+    } else if (e.type === 'hit') sprite = assets.hitFlash;
     else if (e.type === 'powerup') sprite = assets.powerupCollect;
     if (sprite) {
       ctx.save();

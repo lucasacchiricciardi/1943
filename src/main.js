@@ -7,7 +7,7 @@ import { enemies, drawEnemies, updateEnemies, startEnemySpawning, stopEnemySpawn
 import { checkBulletEnemyCollisions } from './collision.js';
 import { gameState, drawHUD, resetGameStats, loseLife } from './hud.js';
 import { assets, loadAssets } from './assets.js';
-import { effects, addEffect, updateEffects, drawEffects } from './effects.js';
+import { effects, addEffect, updateEffects, drawEffects, setExplosionAnim } from './effects.js';
 import { createSpriteAnimation } from './sprite.js';
 
 // Setup controlli e caricamento asset
@@ -16,6 +16,7 @@ let playerAnim;
 let enemyAnims = [];
 let bossAnim;
 loadAssets(() => {
+		setExplosionAnim(assets);
 	// --- ANIMAZIONE PLAYER ---
 	// Scelta: 8 frame orizzontali, 40x40 px, 8 fps. Idle/movimento, nessuna animazione verticale.
 	playerAnim = createSpriteAnimation({
@@ -208,7 +209,7 @@ function gameLoop() {
 	});
 	ctx.restore();
 	drawPowerUps(ctx, assets);
-	drawEffects(ctx, assets);
+	drawEffects(ctx, assets, delta);
 	drawHUD(ctx, canvasWidth, assets);
 	bgOffset += bgSpeed;
 	if (gameState.lives > 0 && (bossActive || levelInProgress)) requestAnimationFrame(gameLoop);
