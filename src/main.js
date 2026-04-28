@@ -1,72 +1,13 @@
-// --- Parametri aereo giocatore ---
-const player = {
-	x: canvasWidth / 2 - 20,
-	y: canvasHeight - 80,
-	width: 40,
-	height: 40,
-	speed: 5,
-	color: '#ffe066',
-	moving: { left: false, right: false, up: false, down: false }
-};
+import { powerUps, spawnPowerUp, updatePowerUps, drawPowerUps, resetPowerUps } from './powerups.js';
+import { player, drawPlayer, updatePlayer, setupPlayerControls } from './player.js';
+import { bullets, drawBullets, updateBullets, setupBulletControls } from './bullets.js';
+import { enemies, drawEnemies, updateEnemies, startEnemySpawning, stopEnemySpawning, resetEnemies } from './enemies.js';
+import { checkBulletEnemyCollisions } from './collision.js';
+import { gameState, drawHUD, resetGameStats, loseLife } from './hud.js';
 
-function drawPlayer() {
-	ctx.save();
-	ctx.fillStyle = player.color;
-	ctx.fillRect(player.x, player.y, player.width, player.height);
-	ctx.restore();
-}
-
-function updatePlayer() {
-	if (player.moving.left) player.x -= player.speed;
-	if (player.moving.right) player.x += player.speed;
-	if (player.moving.up) player.y -= player.speed;
-	if (player.moving.down) player.y += player.speed;
-	// Limiti bordo canvas
-	player.x = Math.max(0, Math.min(canvasWidth - player.width, player.x));
-	player.y = Math.max(0, Math.min(canvasHeight - player.height, player.y));
-}
-
-window.addEventListener('keydown', (e) => {
-	switch (e.key) {
-		case 'ArrowLeft':
-		case 'a':
-			player.moving.left = true;
-			break;
-		case 'ArrowRight':
-		case 'd':
-			player.moving.right = true;
-			break;
-		case 'ArrowUp':
-		case 'w':
-			player.moving.up = true;
-			break;
-		case 'ArrowDown':
-		case 's':
-			player.moving.down = true;
-			break;
-	}
-});
-
-window.addEventListener('keyup', (e) => {
-	switch (e.key) {
-		case 'ArrowLeft':
-		case 'a':
-			player.moving.left = false;
-			break;
-		case 'ArrowRight':
-		case 'd':
-			player.moving.right = false;
-			break;
-		case 'ArrowUp':
-		case 'w':
-			player.moving.up = false;
-			break;
-		case 'ArrowDown':
-		case 's':
-			player.moving.down = false;
-			break;
-	}
-});
+// Setup controlli
+setupPlayerControls();
+setupBulletControls(player);
 // Entry point del gioco
 
 const startScreen = document.getElementById('start-screen');
@@ -102,19 +43,83 @@ function drawBackground() {
 	ctx.fillRect(0, (bgOffset % canvasHeight), canvasWidth, canvasHeight);
 }
 
+function checkPowerUpCollision() {
+	for (let i = powerUps.length - 1; i >= 0; i--) {
+		const p = powerUps[i];
+		if (
+			p.x + 12 > player.x &&
+			p.x - 12 < player.x + player.width &&
+			p.y + 12 > player.y &&
+			p.y - 12 < player.y + player.height
+		) {
+			applyPowerUp(p.type);
+			powerUps.splice(i, 1);
+		}
+	}
+}
+
+function applyPowerUp(type) {
+	switch (type) {
+		case 'fire':
+			// Potenzia fuoco (placeholder)
+			gameState.score += 250;
+			break;
+		case 'heal':
+			if (gameState.lives < gameState.maxLives) gameState.lives++;
+			break;
+		case 'bomb':
+			enemies.length = 0;
+			break;
+	}
+}
+
 function gameLoop() {
 	ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 	drawBackground();
-	updatePlayer();
-	drawPlayer();
+	updatePlayer(canvasWidth, canvasHeight);
+	updateBullets();
+	updateEnemies(canvasHeight, player, () => {
+		loseLife();
+		if (gameState.lives <= 0) endGame();
+	});
+	updatePowerUps(canvasHeight);
+	checkBulletEnemyCollisions(bullets, enemies, (points) => {
+		gameState.score += points;
+		// 30% di probabilità di rilascio power-up
+		if (Math.random() < 0.3) {
+			const lastEnemy = enemies.length ? enemies[enemies.length-1] : null;
+			spawnPowerUp(
+				lastEnemy ? lastEnemy.x + lastEnemy.width/2 : player.x + player.width/2,
+				lastEnemy ? lastEnemy.y + lastEnemy.height/2 : player.y
+			);
+		}
+	});
+	checkPowerUpCollision();
+	drawPlayer(ctx);
+	drawBullets(ctx);
+	drawEnemies(ctx);
+	drawPowerUps(ctx);
+	drawHUD(ctx, canvasWidth);
 	bgOffset += bgSpeed;
-	requestAnimationFrame(gameLoop);
+	if (gameState.lives > 0) requestAnimationFrame(gameLoop);
 }
 
 function startGame() {
 	bgOffset = 0;
+	player.x = canvasWidth / 2 - player.width / 2;
+	player.y = canvasHeight - 80;
+	bullets.length = 0;
+	resetEnemies();
+	resetPowerUps();
+	resetGameStats();
 	showScreen(gameContainer);
+	startEnemySpawning(canvasWidth);
 	requestAnimationFrame(gameLoop);
+}
+function endGame() {
+	stopEnemySpawning();
+	showScreen(gameOverScreen);
+	finalScore.textContent = `Punteggio finale: ${gameState.score}`;
 }
 
 startBtn.addEventListener('click', startGame);
